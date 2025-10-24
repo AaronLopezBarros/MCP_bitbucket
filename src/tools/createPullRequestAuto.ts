@@ -23,7 +23,7 @@ export const createPullRequestAuto = {
     closeSourceBranch,
     project,
   }) {
-    const url = `https://api.bitbucket.org/2.0/repositories/iati-devs/${project}/pullrequests`;
+    const url = `https://api.bitbucket.org/2.0/repositories/${process.env.BITBUCKET_WORKSPACE}/${project}/pullrequests`;
 
     const body = {
       title: title,

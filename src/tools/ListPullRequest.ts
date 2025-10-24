@@ -8,17 +8,27 @@ export const listPullRequest = {
     project: z.string(),
   },
   async run({ project }) {
-    const url = `https://api.bitbucket.org/2.0/repositories/iati-devs/${project}/pullrequests`;
+    const url = `https://api.bitbucket.org/2.0/repositories/${process.env.BITBUCKET_WORKSPACE}/${project}/pullrequests`;
     try {
       const response = await fetchBitbucket(url, "GET");
       const data = await response.json();
 
       return {
-        content: [{ type: "text" as const, text: `Here you can see the pull requests: ${JSON.stringify(data)}` }],
+        content: [
+          {
+            type: "text" as const,
+            text: `Here you can see the pull requests: ${JSON.stringify(data)}`,
+          },
+        ],
       };
     } catch (error) {
       return {
-        content: [{ type: "text" as const, text: `Failed to list pull requests: ${error}` }],
+        content: [
+          {
+            type: "text" as const,
+            text: `Failed to list pull requests: ${error}`,
+          },
+        ],
       };
     }
   },
