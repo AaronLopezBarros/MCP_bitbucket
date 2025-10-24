@@ -1,7 +1,11 @@
 import path from "path";
 import simpleGit from "simple-git";
 
-import { getProjectFromRepoUrl, generateDescriptionFromChanges, getCurrentBranch } from "../utils/git";
+import {
+  getProjectFromRepoUrl,
+  generateDescriptionFromChanges,
+  getCurrentBranch,
+} from "../utils/git";
 import { z } from "zod";
 
 export const preparePullRequestAuto = {
@@ -18,10 +22,17 @@ export const preparePullRequestAuto = {
     const git = simpleGit(repoPath);
     const title = await getCurrentBranch(git);
     const sourceBranch = await getCurrentBranch(git);
-    const destinationBranch = "develop";
-    const description = await generateDescriptionFromChanges(sourceBranch, destinationBranch, git);
+    const destinationBranch =
+      process.env.BITBUCKET_DEFAULT_DESTINATION_BRANCH || "develop";
+    const description = await generateDescriptionFromChanges(
+      sourceBranch,
+      destinationBranch,
+      git
+    );
     const project = await getProjectFromRepoUrl(git);
-    const closeSourceBranch = true;
+    const closeSourceBranch =
+      process.env.BITBUCKET_CLOSE_SOURCE_BRANCH === "true" ||
+      process.env.BITBUCKET_CLOSE_SOURCE_BRANCH === undefined;
 
     return {
       content: [

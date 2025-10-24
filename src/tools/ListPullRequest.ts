@@ -8,7 +8,9 @@ export const listPullRequest = {
     project: z.string(),
   },
   async run({ project }) {
-    const url = `https://api.bitbucket.org/2.0/repositories/${process.env.BITBUCKET_WORKSPACE}/${project}/pullrequests`;
+    const apiBaseUrl =
+      process.env.BITBUCKET_API_BASE_URL || "https://api.bitbucket.org/2.0";
+    const url = `${apiBaseUrl}/repositories/${process.env.BITBUCKET_WORKSPACE}/${project}/pullrequests`;
     try {
       const response = await fetchBitbucket(url, "GET");
       const data = await response.json();

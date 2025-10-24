@@ -23,7 +23,9 @@ export const createPullRequestAuto = {
     closeSourceBranch,
     project,
   }) {
-    const url = `https://api.bitbucket.org/2.0/repositories/${process.env.BITBUCKET_WORKSPACE}/${project}/pullrequests`;
+    const apiBaseUrl =
+      process.env.BITBUCKET_API_BASE_URL || "https://api.bitbucket.org/2.0";
+    const url = `${apiBaseUrl}/repositories/${process.env.BITBUCKET_WORKSPACE}/${project}/pullrequests`;
 
     const body = {
       title: title,
@@ -31,7 +33,7 @@ export const createPullRequestAuto = {
       destination: { branch: { name: destinationBranch } },
       description,
       close_source_branch: closeSourceBranch,
-      reviewers: [{ uuid: process.env.BITBUCKET_REVIWER_UUDI }],
+      reviewers: [{ uuid: process.env.BITBUCKET_REVIEWER_UUID }],
     };
 
     try {
